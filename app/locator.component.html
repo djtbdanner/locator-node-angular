@@ -1,28 +1,24 @@
 <div class="basic">
   <h2 class="no-print">Location Widgit</h2>
   <form #form="ngForm">
-    <table class="table no-print">
+    <table class="table">
       <tbody>
         <tr>
-          <td colspan="2">
-            <label>Latitude</label>
-            <input class="form-control" name="latitudeField" [formControl]="latitudeField" />
+          <td>
+            <label>Latitude</label><br> {{theLat}}
           </td>
-          <td colspan="2">
-            <label>Longitude</label>
-            <input class="form-control" name="longitudeField" [formControl]="longitudeField" />
+          <td>
+            <label>Longitude</label><br> {{theLong}}
           </td>
         </tr>
-        <!--<tr>
-          <td colspan="2">
-            <label>Latitude to find</label>
-            <input class="form-control" name="latitudeField" [formControl]="latitudeField" />
+        <tr>
+          <td>
+            <label>Count</label><br> {{theCount}}
           </td>
-          <td colspan="2">
-            <label>Longitude to find</label>
-            <input class="form-control" name="longitudeField" [formControl]="longitudeField" />
+          <td>
+            <label>Stuff here</label><br>
           </td>
-        </tr>-->
+        </tr>
       </tbody>
     </table>
   </form>

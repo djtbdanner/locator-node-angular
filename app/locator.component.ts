@@ -6,27 +6,29 @@ import { FormControl } from '@angular/forms';
     selector: 'jdf-calculator',
     templateUrl: 'app/locator.component.html'
 })
+
 export class Locator {
-
-
     latitudeField = new FormControl();
     longitudeField = new FormControl();
+    theLat = "";
+    theLong = "";
+    theCount = 0;
 
     ngOnInit() {
-        this.displayLatLong();
-        var int2 = setInterval(function () {
-            
-             this.displayLatLong(); 
-            
-        }, 1000);
+        this.displayLatLong(this);
+        this.withoutFatArrow();
 
     }
 
-    displayLatLong() {
-        let x = this;
+    displayLatLong(theThis) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            x.latitudeField.setValue(position.coords.latitude);
-            x.longitudeField.setValue(position.coords.longitude);
+            theThis.theLat = position.coords.latitude;
+            theThis.theLong = position.coords.longitude;
+            theThis.theCount = theThis.theCount + 1;
         });
+    }   
+
+    withoutFatArrow() {
+        this.timer = setInterval(()=>  this.displayLatLong(this), 500);
     }
 }

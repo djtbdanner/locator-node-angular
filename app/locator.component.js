@@ -16,19 +16,24 @@ var Locator = (function () {
     function Locator() {
         this.latitudeField = new forms_1.FormControl();
         this.longitudeField = new forms_1.FormControl();
+        this.theLat = "";
+        this.theLong = "";
+        this.theCount = 0;
     }
     Locator.prototype.ngOnInit = function () {
-        this.displayLatLong();
-        var int2 = setInterval(function () {
-            this.displayLatLong();
-        }, 1000);
+        this.displayLatLong(this);
+        this.withoutFatArrow();
     };
-    Locator.prototype.displayLatLong = function () {
-        var x = this;
+    Locator.prototype.displayLatLong = function (theThis) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            x.latitudeField.setValue(position.coords.latitude);
-            x.longitudeField.setValue(position.coords.longitude);
+            theThis.theLat = position.coords.latitude;
+            theThis.theLong = position.coords.longitude;
+            theThis.theCount = theThis.theCount + 1;
         });
+    };
+    Locator.prototype.withoutFatArrow = function () {
+        var _this = this;
+        this.timer = setInterval(function () { return _this.displayLatLong(_this); }, 500);
     };
     Locator = __decorate([
         core_1.Component({
