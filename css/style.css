@@ -6,18 +6,13 @@
   color: black;
 }
 
-.loader {
-    border: 16px solid black;
-    border-top: 16px solid gray;
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    animation: spin 2s linear infinite;
-    position:absolute;
+.basicTable{
+    width: 100%;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.basicTd{
+    padding: 1px;
+    margin: 1px;
+    border: 1px;
+    border: solid black 2px;
 }
-

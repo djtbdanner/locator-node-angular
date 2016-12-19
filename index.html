@@ -15,12 +15,19 @@
       maximumAge: 0
     };
     var id = navigator.geolocation.watchPosition(success, error, this.options);
+
     function success(position) {
       document.getElementById("theLat").innerHTML = position.coords.latitude;
       document.getElementById("theLong").innerHTML = position.coords.longitude;
       document.getElementById("theHeading").innerHTML = position.coords.heading;
-      document.getElementById("theAccuracy").innerHTML = position.coords.accuracy;
-      document.getElementById("theSpeed").innerHTML = position.coords.speed;
+      document.getElementById("theAccuracy").innerHTML = position.coords.accuracy + " meters";
+      var speed = position.coords.speed;
+      if (speed === null || speed === 0) {
+        document.getElementById("theSpeed").innerHTML = "You are standing still";
+      } else {
+        document.getElementById("theSpeed").innerHTML = (speed * 2.23693629) + "Mph";
+      }
+      document.getElementById("theAltitude").innerHTML = position.coords.altitude;
     }
 
     function error(err) {
@@ -33,29 +40,38 @@
 <body>
 
   <div class="basic">
-    <h2 class="no-print">Location Widgit</h2>
-    <form #form="ngForm">
-      <table class="table">
+    <h2>Location Widgit</h2>
+    <form>
+      <table class="basicTable">
         <tbody>
           <tr>
-            <td>
-              <label>Latitude</label><br> <span id="theLat">theLat</span>
-            </td>
-            <td>
-              <label>Longitude</label><br> <span id="theLong">theLong</span>
+            <td align="center" class="basicTd">
+              <h3><label>Latitude</label><br/><span id="theLat">theLat</span></h3>
             </td>
           </tr>
           <tr>
-            <td>
-              <label>Heading</label><br> <span id="theHeading">theHeading</span>
-            </td>
-            <td>
-              <label>Speed</label><br> <span id="theSpeed">theSpeed</span>
+            <td align="center" class="basicTd">
+              <h3><label>Longitude</label><br> <span id="theLong">theLong</span></h3>
             </td>
           </tr>
           <tr>
-            <td colspan="2">
-              <label>Accuracy</label><br> <span id="theAccuracy">theAccuracy</span>
+            <td align="center" class="basicTd">
+              <h3><label>Heading</label><br> <span id="theHeading">theHeading</span></h3>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" class="basicTd">
+              <h3><label>Speed</label><br> <span id="theSpeed">theSpeed</span></h3>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" class="basicTd">
+              <h3><label>Altitude</label><br> <span id="theAltitude">theAltitude</span></h3>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" class="basicTd">
+              <h3><label>Accuracy</label><br> <span id="theAccuracy">theAccuracy</span></h3>
             </td>
           </tr>
         </tbody>
