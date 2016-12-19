@@ -20,12 +20,16 @@
       document.getElementById("theLat").innerHTML = position.coords.latitude;
       document.getElementById("theLong").innerHTML = position.coords.longitude;
       document.getElementById("theHeading").innerHTML = position.coords.heading;
-      document.getElementById("theAccuracy").innerHTML = position.coords.accuracy + " meters";
+      var accuracy = position.coords.accuracy;
+      accuracy = Math.round(accuracy * 100)/100;
+      document.getElementById("theAccuracy").innerHTML = accuracy + " meters";
       var speed = position.coords.speed;
       if (speed === null || speed === 0) {
         document.getElementById("theSpeed").innerHTML = "You are standing still";
       } else {
-        document.getElementById("theSpeed").innerHTML = (speed * 2.23693629) + "Mph";
+        speed = speed * 2.23693629;
+        speed = Math.round(speed);
+        document.getElementById("theSpeed").innerHTML = speed + " Mph";
       }
       document.getElementById("theAltitude").innerHTML = position.coords.altitude;
     }
