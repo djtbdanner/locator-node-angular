@@ -4,69 +4,64 @@
 <head>
   <title>Locator</title>
   <meta charset="UTF-8">
-  <meta name="description" content="Payment calculator/printer">
-  <meta name="keywords" content="loan,calculator,amortization calculator,interest">
-  <meta name="author" content="Dave Danner">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
   <!-- Include Bootstrap-->
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-  <!-- Polyfill(s) for older browsers -->
-  <script src="node_modules/core-js/client/shim.min.js"></script>
-
-  <script src="node_modules/zone.js/dist/zone.js"></script>
-  <script src="node_modules/reflect-metadata/Reflect.js"></script>
-  <script src="node_modules/systemjs/dist/system.src.js"></script>
-
-  <script src="systemjs.config.js"></script>
   <script>
-    System.import('app').catch(function (err) { console.error(err); });
-    var i = 0;
-    function moveIt() {
-      try {
-        i = i + 1;
-        var e = document.getElementById("spinner");
-        e.style.left = i + "px";
-      } catch (err) {
-        clearAnimation()
-      }
+    options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    var id = navigator.geolocation.watchPosition(success, error, this.options);
+    function success(position) {
+      document.getElementById("theLat").innerHTML = position.coords.latitude;
+      document.getElementById("theLong").innerHTML = position.coords.longitude;
+      document.getElementById("theHeading").innerHTML = position.coords.heading;
+      document.getElementById("theAccuracy").innerHTML = position.coords.accuracy;
+      document.getElementById("theSpeed").innerHTML = position.coords.speed;
     }
 
-    var j = 1;
-    var elipse = "";
-    function doElipse() {
-      try {
-        var e2 = document.getElementById("elipse");
-
-        for (var x = 0; x < j; x++) {
-          elipse = elipse + "."
-        }
-        e2.textContent = elipse;
-      } catch (err) {
-        clearAnimation()
-      }
+    function error(err) {
+      alert('ERROR(' + err.code + '): ' + err.message);
     }
 
-    var int1 = setInterval(function () { moveIt(); }, 100);
-    var int2 = setInterval(function () { doElipse(); }, 1000);
-    function clearAnimation() {
-      clearInterval(int1);
-      clearInterval(int2);
-    }  
   </script>
 </head>
 
 <body>
-  <jdf-calculator>
 
-    <h1>
-      Application is loading<span id="elipse"></span>
-    </h1>
-    <div class="loader" id="spinner"></div>
-  </jdf-calculator>
-
+  <div class="basic">
+    <h2 class="no-print">Location Widgit</h2>
+    <form #form="ngForm">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <label>Latitude</label><br> <span id="theLat">theLat</span>
+            </td>
+            <td>
+              <label>Longitude</label><br> <span id="theLong">theLong</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Heading</label><br> <span id="theHeading">theHeading</span>
+            </td>
+            <td>
+              <label>Speed</label><br> <span id="theSpeed">theSpeed</span>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <label>Accuracy</label><br> <span id="theAccuracy">theAccuracy</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
 </body>
 
 </html>
