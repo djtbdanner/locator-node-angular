@@ -6,103 +6,133 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
-  <!-- Include Bootstrap-->
-  <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script>
-    var logCount = 0;
-    options = {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 0
-    };
-    
-    var id = navigator.geolocation.watchPosition(display, error, this.options);
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADu_YKCJ46yrZMz3QJ46obDEJIvHM5EAo&callback=initMap">
+  </script>
+<script>
+  var logCount = 0;
+  options = {
+    enableHighAccuracy: true,
+    timeout: 15000,
+    maximumAge: 0
+  };
 
-    function display(position) {
-      document.getElementById("theLat").innerHTML = position.coords.latitude;
-      document.getElementById("theLong").innerHTML = position.coords.longitude;
-      document.getElementById("theHeading").innerHTML = degToCompass(position.coords.heading);
-      var accuracy = position.coords.accuracy;
-      accuracy = Math.round(accuracy * 100) / 100;
-      document.getElementById("theAccuracy").innerHTML = accuracy + " meters";
-      document.getElementById("theSpeed").innerHTML = getSpeed(position.coords.speed);
-      document.getElementById("theAltitude").innerHTML = position.coords.altitude===null?"NA":position.coords.altitude;
+  var id = navigator.geolocation.watchPosition(display, error, this.options);
+
+  function display(position) {
+    document.getElementById("theLat").innerHTML = position.coords.latitude;
+    document.getElementById("theLong").innerHTML = position.coords.longitude;
+    document.getElementById("theHeading").innerHTML = degToCompass(position.coords.heading);
+    var accuracy = position.coords.accuracy;
+    accuracy = Math.round(accuracy * 100) / 100;
+    document.getElementById("theAccuracy").innerHTML = accuracy + " meters";
+    document.getElementById("theSpeed").innerHTML = getSpeed(position.coords.speed);
+    document.getElementById("theAltitude").innerHTML = position.coords.altitude === null ? "NA" : position.coords.altitude;
+
+    moveMap(position.coords.latitude, position.coords.longitude);
+  }
+
+  function error(err) {
+    var errMssg = "Unable to determine location due to error (" + err.code + "). Error Message: " + err.message + ". Error # " + logCount + ". All following errors will log to console.";
+    if (logCount > 1) {
+      console.log(errMssg);
+    } else {
+      alert(errMssg);
     }
+    logCount = logCount + 1;
+  }
 
-    function error(err) {
-      var errMssg = "Unable to determine location due to error (" + err.code + "). Error Message: " + err.message + ". Error # " + logCount + ". All following errors will log to console.";
-      if (logCount > 1) {
-        console.log(errMssg);
-      } else {
-        alert(errMssg);
-      }
-      logCount = logCount + 1;
-    }
-
-    function getSpeed(speed) {
-      var speedTxt = "NA";
-      if (speed === null || speed === 0) {
-        return speedTxt;
-      }
-
-      speed = speed * 2.23693629;
-      speed = Math.round(speed);
-      speedTxt = speed + " Mph";
+  function getSpeed(speed) {
+    var speedTxt = "NA";
+    if (speed === null || speed === 0) {
       return speedTxt;
     }
 
-    function degToCompass(num) {
-      if (num === null) {
-        return "NA";
-      }
-      var val = Math.floor((num / 22.5) + 0.5);
-      var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
-      return arr[(val % 16)] + " (" + num + "°) ";
+    speed = speed * 2.23693629;
+    speed = Math.round(speed);
+    speedTxt = speed + " Mph";
+    return speedTxt;
+  }
+
+  function degToCompass(num) {
+    if (num === null) {
+      return "NA";
     }
+    var val = Math.floor((num / 22.5) + 0.5);
+    var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    return arr[(val % 16)] + " (" + num + "°) ";
+  }
 
-  </script>
+  function moveMap(latitude, longitude) {
+    var uluru = { lat: latitude, lng: longitude };
+    map.setCenter(uluru);
+    map.setZoom(16);
+    marker.setPosition(uluru);
+  }
+
+  var map;
+  var marker;
+  function initMap() {
+    var uluru = { lat: 41.8781136, lng: -87.6297982 };
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: uluru
+    });
+    marker = new google.maps.Marker({
+      position: uluru,
+      map: map
+    });
+  }
+
+</script>
 </head>
-
 <body>
-
-  <div class="basic">
-    <form>
-      <table class="basicTable">
+  <form>
+    <div class="basic">
+      <table>
         <tbody>
           <tr>
-            <td align="center" class="basicTd">
-              <h3><label>Latitude</label><br/><span id="theLat">theLat</span></h3>
+            <td align="center">
+              <h4><label>Latitude</label>: <span id="theLat">Unknown</span></h4>
             </td>
           </tr>
           <tr>
-            <td align="center" class="basicTd">
-              <h3><label>Longitude</label><br> <span id="theLong">theLong</span></h3>
+            <td align="center">
+              <h4><label>Longitude</label>: <span id="theLong">Unknown</span></h4>
             </td>
           </tr>
           <tr>
-            <td align="center" class="basicTd">
-              <h3><label>Heading</label><br> <span id="theHeading">theHeading</span></h3>
+            <td align="center">
+              <h4><label>Heading</label>: <span id="theHeading">Unknown</span></h4>
             </td>
           </tr>
           <tr>
-            <td align="center" class="basicTd">
-              <h3><label>Speed</label><br> <span id="theSpeed">theSpeed</span></h3>
+            <td align="center">
+              <h4><label>Speed</label>: <span id="theSpeed">Unknown</span></h4>
             </td>
           </tr>
           <tr>
-            <td align="center" class="basicTd">
-              <h3><label>Altitude</label><br> <span id="theAltitude">theAltitude</span></h3>
+            <td align="center">
+              <h4><label>Altitude</label>: <span id="theAltitude">Unknown</span></h4>
             </td>
           </tr>
           <tr>
-            <td align="center" class="basicTd">
-              <h3><label>Accuracy</label><br> <span id="theAccuracy">theAccuracy</span></h3>
+            <td align="center">
+              <h4><label>Accuracy</label>: <span id="theAccuracy">Unknown</span></h4>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div id="map" class="map">
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
-    </form>
-  </div>
+    </div>
+
+
+  </form>
+
 </body>
 
 </html>
